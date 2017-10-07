@@ -16,6 +16,7 @@ namespace IapdLabWork3
         BatteryInfo batteryInfo = new BatteryInfo();
         string previousAdapterStatus = "Offline";
         Boolean isAdapter = false;
+        int screenOffOldValue=-1, sleepModeOldValue=-1;
 
         public Form1()
         {
@@ -46,7 +47,9 @@ namespace IapdLabWork3
         private void configureTimeTracks()
         {
             trackBar1.Value = (int)(isAdapter ? PowerPlan.getScreenOffTimeoutAC() : PowerPlan.getScreenOffTimeoutDC());
-            trackBar2.Value = (int)(isAdapter ? PowerPlan.getSleepModeTimeoutAC() : PowerPlan.getSleepModeTimeoutDC());
+            screenOffOldValue = screenOffOldValue==-1 ? trackBar1.Value : screenOffOldValue;
+            sleepModeOldValue = trackBar2.Value = (int)(isAdapter ? PowerPlan.getSleepModeTimeoutAC() : PowerPlan.getSleepModeTimeoutDC());
+            sleepModeOldValue = sleepModeOldValue == -1 ? trackBar2.Value : sleepModeOldValue;
         }
         
         private void timer1_Tick(object sender, EventArgs e)
@@ -117,7 +120,8 @@ namespace IapdLabWork3
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            configureTimeTracks();
+            trackBar1.Value = screenOffOldValue;
+            trackBar2.Value = sleepModeOldValue;
         }
     }
 }
