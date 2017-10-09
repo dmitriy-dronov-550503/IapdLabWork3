@@ -37,7 +37,7 @@ namespace IapdLabWork3
         public void UpdateInfo()
         {
             searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT DesignVoltage, EstimatedChargeRemaining FROM Win32_Battery");
-            if (searcher.Get() == null)
+            if (searcher.Get().Count==0)
                 powerType = "AC";
             else
             {

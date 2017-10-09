@@ -35,6 +35,17 @@ namespace IapdLabWork3
             pictureBox1.Height = (int)(((double)panel1.Height / 100) * (batteryInfo.GetCharge()))+15;
             label1.Text = batteryInfo.GetCharge().ToString() + "%";
             label2.Text = "Power type: " + batteryInfo.GetPowerType();
+            if (batteryInfo.GetPowerType().Equals("AC"))
+            {
+                MessageBox.Show("You are using computer without battery, or system battery information is not available.", "Battery not detected",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Warning);
+                dateTimePicker1.Enabled = dateTimePicker2.Enabled = false;
+                trackBar1.Enabled = trackBar2.Enabled = false;
+                linkLabel1.Enabled = linkLabel2.Enabled = false;
+                dateTimePicker1.CustomFormat = dateTimePicker2.CustomFormat = "N/A";
+                timer1.Stop();
+            }
             label3.Text = batteryInfo.GetRemainingTime();
             previousAdapterStatus = batteryInfo.GetAdapterStatus();
             label4.Text = "Adapter status: " + previousAdapterStatus;
