@@ -16,7 +16,7 @@ namespace IapdLabWork3
         BatteryInfo batteryInfo = new BatteryInfo();
         string previousAdapterStatus = "Offline";
         Boolean isAdapter = false;
-        int screenOffOldValue=-1, sleepModeOldValue=-1;
+        int screenOffOldValue = -1, sleepModeOldValue = -1;
 
         public Form1()
         {
@@ -32,7 +32,7 @@ namespace IapdLabWork3
             dateTimePicker1.CustomFormat = dateTimePicker2.CustomFormat = "HH:mm:ss";
             dateTimePicker1.ShowUpDown = dateTimePicker2.ShowUpDown = true;
             batteryInfo.UpdateInfo();
-            pictureBox1.Height = (int)(((double)panel1.Height / 100) * (batteryInfo.GetCharge()))+15;
+            pictureBox1.Height = (int)(((double)panel1.Height / 100) * (batteryInfo.GetCharge())) + 15;
             label1.Text = batteryInfo.GetCharge().ToString() + "%";
             label2.Text = "Power type: " + batteryInfo.GetPowerType();
             label3.Text = batteryInfo.GetRemainingTime();
@@ -47,16 +47,16 @@ namespace IapdLabWork3
         private void configureTimeTracks()
         {
             trackBar1.Value = (int)(isAdapter ? PowerPlan.getScreenOffTimeoutAC() : PowerPlan.getScreenOffTimeoutDC());
-            screenOffOldValue = screenOffOldValue==-1 ? trackBar1.Value : screenOffOldValue;
+            screenOffOldValue = screenOffOldValue == -1 ? trackBar1.Value : screenOffOldValue;
             sleepModeOldValue = trackBar2.Value = (int)(isAdapter ? PowerPlan.getSleepModeTimeoutAC() : PowerPlan.getSleepModeTimeoutDC());
             sleepModeOldValue = sleepModeOldValue == -1 ? trackBar2.Value : sleepModeOldValue;
         }
-        
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             batteryInfo.UpdateInfo();
-            pictureBox1.Height = (int)((((double)panel1.Height / 100) * (batteryInfo.GetCharge())))+15;
-            label1.Text = batteryInfo.GetCharge().ToString()+"%";
+            pictureBox1.Height = (int)((((double)panel1.Height / 100) * (batteryInfo.GetCharge()))) + 15;
+            label1.Text = batteryInfo.GetCharge().ToString() + "%";
             label2.Text = "Power type: " + batteryInfo.GetPowerType();
             label3.Text = batteryInfo.GetRemainingTime();
             label4.Text = "Adapter status: " + batteryInfo.GetAdapterStatus();
@@ -65,16 +65,18 @@ namespace IapdLabWork3
                 configureTimeTracks();
             previousAdapterStatus = batteryInfo.GetAdapterStatus();
             label5.Text = "Battery status: " + batteryInfo.GetBatteryStatus();
-            label6.Text = "Voltage: " + ((double)batteryInfo.GetVoltage()/1000).ToString()+" V";
+            label6.Text = "Voltage: " + ((double)batteryInfo.GetVoltage() / 1000).ToString() + " V";
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (isAdapter) {
+            if (isAdapter)
+            {
                 PowerPlan.setScreenOffTimeoutAC((uint)trackBar1.Value);
                 PowerPlan.setSleepModeTimeoutAC((uint)trackBar2.Value);
             }
-            else {
+            else
+            {
                 PowerPlan.setScreenOffTimeoutDC((uint)trackBar1.Value);
                 PowerPlan.setSleepModeTimeoutDC((uint)trackBar2.Value);
             }
@@ -122,6 +124,20 @@ namespace IapdLabWork3
         {
             trackBar1.Value = screenOffOldValue;
             trackBar2.Value = sleepModeOldValue;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isAdapter)
+            {
+                PowerPlan.setScreenOffTimeoutAC((uint)screenOffOldValue);
+                PowerPlan.setSleepModeTimeoutAC((uint)sleepModeOldValue);
+            }
+            else
+            {
+                PowerPlan.setScreenOffTimeoutDC((uint)screenOffOldValue);
+                PowerPlan.setSleepModeTimeoutDC((uint)sleepModeOldValue);
+            }
         }
     }
 }
